@@ -1,0 +1,41 @@
+name: Taeglicher Divergenz-Scan
+
+on:
+  schedule:
+    # 21:30 UTC = 23:30 deutscher Sommerzeit / 22:30 Winterzeit,
+    # jeweils nach US-Boersenschluss (Mo-Fr)
+    - cron: "30 21 * * 1-5"
+  workflow_dispatch: {}   # manueller Start ueber den Actions-Tab
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  scan-und-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Abhaengigkeiten installieren
+        run: pip install -r requirements.txt
+      - name: S&P 500 scannen
+        run: python divergenz-screener.py sp500-ticker.txt
+      - name: Dashboard bauen
+        run: python dashboard-bauen.py
+      - uses: actions/configure-pages@v4
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+      - id: deployment
+        uses: actions/deploy-pages@v4
