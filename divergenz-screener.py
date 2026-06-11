@@ -37,12 +37,17 @@ def scan_symbol(df, ticker):
     rsi = rsi_wilder(close); sma50 = close.rolling(50).mean(); n = len(df)
     pivots = [p for p in pivot_lows(low) if not math.isnan(rsi.iloc[p])]
     if not pivots: return []
+    # Nur taggenaue Signale:
+    #  fruehsignal = Tief HEUTE (letzter Bar), tiefster der letzten FRESH_LEFT Bars
+    #  bestaetigt  = Tief GESTERN, heute hoeheres Tief (1-Bar-Bestaetigung)
     fresh = []; lv = low.values
-    for p in range(n - FRESH_BARS, n):
-        if p <= FRESH_LEFT or math.isnan(rsi.iloc[p]): continue
-        if lv[p] == lv[p-FRESH_LEFT:n].min():
-            fresh.append((p, "fruehsignal")); break
-    fresh += [(p, "bestaetigt") for p in pivots if (p + PIVOT_STRENGTH) >= (n - FRESH_BARS)]
+    p = n - 1
+    if p > FRESH_LEFT and not math.isnan(rsi.iloc[p]) and lv[p] == lv[p-FRESH_LEFT:].min():
+        fresh.append((p, "fruehsignal"))
+    p = n - 2
+    if p > FRESH_LEFT and not math.isnan(rsi.iloc[p]) \
+       and lv[p] == lv[p-FRESH_LEFT:p+1].min() and lv[n-1] > lv[p]:
+        fresh.append((p, "bestaetigt"))
     hits = []
     for p2, status in fresh:
         for p1 in reversed([p for p in pivots if p < p2]):

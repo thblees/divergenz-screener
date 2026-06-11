@@ -56,12 +56,13 @@ padding:7px 16px;border-radius:8px;cursor:pointer;font-size:14px}
  <button data-f="fruehsignal">Nur Fr&uuml;hsignale</button>
 </div>
 <div class="grid" id="grid"></div>
-<div class="foot">Methodik: Fr&uuml;hsignal = das zweite Tief stammt aus den letzten 2 Handelstagen
-(RSI auf Basis des letzten Schlusskurses), ist das tiefste der letzten 12 Bars und noch nicht
-rechts best&auml;tigt - es kann an den Folgetagen unterschritten werden. Best&auml;tigt = klassisches
-Pivot-Tief mit 3 Bars rechts. Regul&auml;r = tieferes Preistief bei h&ouml;herem RSI-Tief (mind. ein
+<div class="foot">Methodik: Fr&uuml;hsignal = das zweite Tief stammt vom HEUTIGEN Handelstag
+(tiefster Punkt der letzten 12 Bars, RSI auf Basis des Schlusskurses) &ndash; noch unbest&auml;tigt,
+es kann an den Folgetagen unterschritten werden. Best&auml;tigt = das Tief war gestern und heute folgte
+ein h&ouml;heres Tief (1-Tages-Best&auml;tigung) &ndash; schw&auml;cher als die klassische Pivot-Best&auml;tigung,
+daf&uuml;r ohne Verz&ouml;gerung. Regul&auml;r = tieferes Preistief bei h&ouml;herem RSI-Tief (mind. ein
 RSI-Tief unter 45). Versteckt = h&ouml;heres Preistief bei tieferem RSI-Tief, nur bei Kurs &uuml;ber
-SMA50. Stärke-Filter: &Delta;RSI &ge; 3 Punkte, &Delta;Tief &ge; 0,5&nbsp;%. Datenquelle: Yahoo
+SMA50. St&auml;rke-Filter: &Delta;RSI &ge; 3 Punkte, &Delta;Tief &ge; 0,5&nbsp;%. Datenquelle: Yahoo
 Finance, adjustierte Tagesschlusskurse. Eine Divergenz ist ein Hinweis, kein Signal f&uuml;r sich
 allein - und das Ganze ist nat&uuml;rlich keine Anlageberatung.</div>
 <script>
